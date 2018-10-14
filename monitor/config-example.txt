@@ -1,0 +1,7 @@
+#location:"Noervenich"             #Location to store in DB. Highly experimental, uncomment if you are unsure
+interface:"wlp2s0mon"             #Wireless monitor(!) interface
+mysql_host:"localhost"            #Host of your MySQL Databse
+mysql_user:"root"                 #MySQL User
+mysql_password:"mysecurepass"     #MySQL Password
+mysql_db:"probes"                 #MySQL Database
+session_timeout:"500"             #Timeout for a device until it is considered as out of range (seconds)

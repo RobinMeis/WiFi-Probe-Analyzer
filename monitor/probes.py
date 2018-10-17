@@ -30,6 +30,12 @@ class probes:
         self.timeoutCallback = None
         self.timeout = timeout
 
+    def seen(self, deviceMAC): #A device was seen, but not as a probe request. This might happen if a device is associated to an AP after sendg a probe request
+        try:
+            self.devices[deviceMAC].seen() #Check if device known and update last seen
+        except KeyError: #Do nothing if device is unknown
+            pass
+
     def probe(self, deviceMAC, ESSID): #A probe request (from scapy)
         try:
             self.devices[deviceMAC].seen() #Check if device known and update last seen

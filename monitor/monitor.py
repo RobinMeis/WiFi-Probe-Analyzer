@@ -13,24 +13,27 @@ class monitor:
         self.probes.threadStart()
         self.probes.setCallback(DEVICE_NEW, self.deviceNew)
         self.probes.setCallback(DEVICE_TIMEOUT, self.deviceTimeout)
-        sniff (iface=configuration["interface"], prn=self.PacketHandler)
+        sniff (iface=configuration["interface"], prn=self.PacketHandler, store=0)
 
     def PacketHandler(self, pkt):
-        if pkt.type == 0 and pkt.subtype == 0x04:
+        if pkt.type == 0 and pkt.subtype == 0x04: #If packet is probe
             self.probes.probe(pkt.addr2, pkt.info.decode('UTF-8'))
+        else: #otherwise just check if device probed earlier and update last seen
+            self.probes.seen(pkt.addr2)
 
     def deviceNew(self, device):
-        print("[%s] New device" % (device.MAC,))
+        print("%s [%s] New device" % (time.strftime("%Y-%m-%d %H:%M:%S"), device.MAC,))
 
     def deviceTimeout(self, device):
-        print("[%s] Timeout" % (device.MAC,))
+        print("%s [%s] Timeout" % (time.strftime("%Y-%m-%d %H:%M:%S"), device.MAC,))
         self.db.storeDevice(self.configuration["location"], device)
 
 configuration = {}
 with open("config.txt") as config:
     for line in config:
         line = re.match("(.*):\"(.*)\".*", line)
-        configuration[line[1]] = line[2]
+        if (line != None):
+            configuration[line.group(1)] = line.group(2)
 
 configuration["session_timeout"] = int(configuration["session_timeout"])
 try:

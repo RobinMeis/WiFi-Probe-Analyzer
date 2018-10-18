@@ -42,9 +42,9 @@ class probes:
         try:
             self.devices[deviceMAC].seen() #Check if device known and update last seen
         except KeyError:
-            self.devices[deviceMAC] = device(deviceMAC) #Create new device
+            self.devices[deviceMAC] = device(deviceMAC, latitude, longitude) #Create new device
             if (self.newCallback != None): #If available, call calback
-                self.newCallback(self.devices[deviceMAC], latitude, longitude)
+                self.newCallback(self.devices[deviceMAC])
 
         self.devices[deviceMAC].addESSID(ESSID) #Store probed ESSID (if available)
 

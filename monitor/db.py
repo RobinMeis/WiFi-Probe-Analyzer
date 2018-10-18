@@ -17,6 +17,15 @@ class mysql_connector:
         if (self.cnx != None):
             self.cnx.close()
 
+    def reconnect(self):
+        try:
+            self.cnx.reconnect(attempts=1, delay=0)
+        except mysql.connector.errors.InterfaceError::
+            return False
+        else
+            print("reconnect good")
+            return True
+
     def addDevice(self, MAC, firstSeen, lastSeen): #Add new device to database
         try: #Try to add device to database
             cursor = self.cnx.cursor()
@@ -90,5 +99,7 @@ class mysql_connector:
                 self.cnx.commit()
             except mysql.connector.errors.OperationalError:
                 self.storage_queue.append(device)
-                self.cnx.reconnect(attempts=1, delay=0)
+                if not self.reconnect(): #If reconnect failed, retry after next timeout
+                    print("not now")
+                    break
         print(self.storage_queue)

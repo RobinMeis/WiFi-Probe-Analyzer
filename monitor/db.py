@@ -23,7 +23,6 @@ class mysql_connector:
         except mysql.connector.errors.InterfaceError:
             return False
         else:
-            print("reconnect good")
             return True
 
     def addDevice(self, MAC, firstSeen, lastSeen): #Add new device to database
@@ -86,7 +85,7 @@ class mysql_connector:
         self.toDB() #Write to database
 
     def toDB(self):
-        for i in range(0, len(self.storage_queue)):
+        for i in range(0, len(self.storage_queue)): #Try to write data to database
             device = self.storage_queue.pop()
             try:
                 self.handleDevice(device.MAC, device.firstSeen, device.lastSeen)
@@ -100,6 +99,4 @@ class mysql_connector:
             except mysql.connector.errors.OperationalError:
                 self.storage_queue.append(device)
                 if not self.reconnect(): #If reconnect failed, retry after next timeout
-                    print("not now")
                     break
-        print(self.storage_queue)

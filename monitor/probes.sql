@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 17, 2018 at 07:37 AM
+-- Generation Time: Oct 18, 2018 at 08:14 AM
 -- Server version: 10.1.26-MariaDB-0+deb9u1
 -- PHP Version: 7.0.30-0+deb9u1
 
@@ -71,7 +71,8 @@ CREATE TABLE `sessions` (
   `firstSeen` datetime NOT NULL,
   `lastSeen` datetime NOT NULL,
   `seenCount` int(11) NOT NULL,
-  `location` enum('Noervenich','Aachen','','') DEFAULT NULL
+  `latitude` decimal(10,8) DEFAULT NULL,
+  `longitude` decimal(11,8) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -112,8 +113,9 @@ ALTER TABLE `sessions`
   ADD KEY `start` (`firstSeen`),
   ADD KEY `end` (`lastSeen`),
   ADD KEY `seenCount` (`seenCount`),
-  ADD KEY `location` (`location`),
-  ADD KEY `deviceID` (`deviceID`);
+  ADD KEY `deviceID` (`deviceID`),
+  ADD KEY `latitude` (`latitude`),
+  ADD KEY `longitude` (`longitude`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -123,22 +125,22 @@ ALTER TABLE `sessions`
 -- AUTO_INCREMENT for table `devices`
 --
 ALTER TABLE `devices`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=393;
 --
 -- AUTO_INCREMENT for table `ESSIDs`
 --
 ALTER TABLE `ESSIDs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
 --
 -- AUTO_INCREMENT for table `sessionESSIDs`
 --
 ALTER TABLE `sessionESSIDs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
 --
 -- AUTO_INCREMENT for table `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=393;
 --
 -- Constraints for dumped tables
 --

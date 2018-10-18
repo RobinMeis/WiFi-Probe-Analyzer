@@ -26,7 +26,7 @@ class monitor:
 
     def deviceTimeout(self, device):
         print("%s [%s] Timeout" % (time.strftime("%Y-%m-%d %H:%M:%S"), device.MAC,))
-        self.db.storeDevice(self.configuration["location"], device)
+        self.db.storeDevice(self.configuration["latitude"], self.configuration["longitude"], device)
 
 configuration = {}
 with open("config.txt") as config:
@@ -36,9 +36,5 @@ with open("config.txt") as config:
             configuration[line.group(1)] = line.group(2)
 
 configuration["session_timeout"] = int(configuration["session_timeout"])
-try:
-    configuration["location"]
-except KeyError:
-    configuration["location"] = None
 
 monitoring = monitor(configuration)

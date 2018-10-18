@@ -58,10 +58,10 @@ class mysql_connector:
         if (not self.addESSID(ESSID, firstSeen, lastSeen)): #Try to add ESSID, if fails...
             self.seenESSID(ESSID, lastSeen) #...just update last seen timestamp
 
-    def addSession(self, MAC, firstSeen, lastSeen, seenCount, location): #Add new Session to database
+    def addSession(self, MAC, firstSeen, lastSeen, seenCount, latitude, longitude): #Add new Session to database
         cursor = self.cnx.cursor()
-        addSession = "INSERT INTO `sessions` (`deviceID`, `firstSeen`, `lastSeen`, `seenCount`, `location`) VALUES ((SELECT `id` FROM `devices` WHERE `mac` = %s), %s, %s, %s, %s)"
-        dataSession = (MAC, firstSeen, lastSeen, seenCount, location)
+        addSession = "INSERT INTO `sessions` (`deviceID`, `firstSeen`, `lastSeen`, `seenCount`, `latitude`, `longitude`) VALUES ((SELECT `id` FROM `devices` WHERE `mac` = %s), %s, %s, %s, %s, %s)"
+        dataSession = (MAC, firstSeen, lastSeen, seenCount, latitude, longitude)
         cursor.execute(addSession, dataSession)
         return cursor.lastrowid
 
@@ -71,9 +71,9 @@ class mysql_connector:
         dataRelation = (sessionID, ESSID)
         cursor.execute(addRelation, dataRelation)
 
-    def storeDevice(self, location, device):
+    def storeDevice(self, latitude, longitude, device):
         self.handleDevice(device.MAC, device.firstSeen, device.lastSeen)
-        sessionID = self.addSession(device.MAC, device.firstSeen, device.lastSeen, device.seenCount, location)
+        sessionID = self.addSession(device.MAC, device.firstSeen, device.lastSeen, device.seenCount, latitude, longitude)
 
         for ESSID in device.ESSIDs:
             self.handleESSID(ESSID, device.firstSeen, device.lastSeen)

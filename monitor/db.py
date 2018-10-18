@@ -71,9 +71,9 @@ class mysql_connector:
         dataRelation = (sessionID, ESSID)
         cursor.execute(addRelation, dataRelation)
 
-    def storeDevice(self, latitude, longitude, device):
+    def storeDevice(self, device):
         self.handleDevice(device.MAC, device.firstSeen, device.lastSeen)
-        sessionID = self.addSession(device.MAC, device.firstSeen, device.lastSeen, device.seenCount, latitude, longitude)
+        sessionID = self.addSession(device.MAC, device.firstSeen, device.lastSeen, device.seenCount, device.latitude, device.longitude)
 
         for ESSID in device.ESSIDs:
             self.handleESSID(ESSID, device.firstSeen, device.lastSeen)

@@ -14,6 +14,8 @@ class device:
         self.ESSIDs = set()
         self.threadRun = False
         self.threadID = None
+        self.latitude = latitude
+        self.longitude = longitude
 
     def seen(self): #Called if device is seen again
         self.lastSeen = datetime.datetime.now()
@@ -36,13 +38,13 @@ class probes:
         except KeyError: #Do nothing if device is unknown
             pass
 
-    def probe(self, deviceMAC, ESSID): #A probe request (from scapy)
+    def probe(self, deviceMAC, ESSID, latitude, longitude): #A probe request (from scapy)
         try:
             self.devices[deviceMAC].seen() #Check if device known and update last seen
         except KeyError:
             self.devices[deviceMAC] = device(deviceMAC) #Create new device
             if (self.newCallback != None): #If available, call calback
-                self.newCallback(self.devices[deviceMAC])
+                self.newCallback(self.devices[deviceMAC], latitude, longitude)
 
         self.devices[deviceMAC].addESSID(ESSID) #Store probed ESSID (if available)
 

@@ -9,7 +9,7 @@ class monitor:
         self.configuration = configuration
         self.db = mysql_connector(configuration["mysql_host"], configuration["mysql_user"], configuration["mysql_password"], configuration["mysql_db"])
         self.db.connect()
-        self.probes = probes(configuration["session_timeout"])
+        self.probes = probes(configuration["session_timeout"], self.configuration["latitude"], self.configuration["longitude"])
         self.probes.threadStart()
         self.probes.setCallback(DEVICE_NEW, self.deviceNew)
         self.probes.setCallback(DEVICE_TIMEOUT, self.deviceTimeout)
@@ -26,7 +26,7 @@ class monitor:
 
     def deviceTimeout(self, device):
         print("%s [%s] Timeout" % (time.strftime("%Y-%m-%d %H:%M:%S"), device.MAC,))
-        self.db.storeDevice(self.configuration["latitude"], self.configuration["longitude"], device)
+        self.db.storeDevice(device)
 
 configuration = {}
 with open("config.txt") as config:

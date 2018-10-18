@@ -9,7 +9,7 @@ class monitor:
         self.configuration = configuration
         self.db = mysql_connector(configuration["mysql_host"], configuration["mysql_user"], configuration["mysql_password"], configuration["mysql_db"])
         self.db.connect()
-        self.probes = probes(configuration["session_timeout"], self.configuration["latitude"], self.configuration["longitude"])
+        self.probes = probes(configuration["session_timeout"])
         self.probes.threadStart()
         self.probes.setCallback(DEVICE_NEW, self.deviceNew)
         self.probes.setCallback(DEVICE_TIMEOUT, self.deviceTimeout)
@@ -17,7 +17,7 @@ class monitor:
 
     def PacketHandler(self, pkt):
         if pkt.type == 0 and pkt.subtype == 0x04: #If packet is probe
-            self.probes.probe(pkt.addr2, pkt.info.decode('UTF-8'))
+            self.probes.probe(pkt.addr2, pkt.info.decode('UTF-8'), self.configuration["latitude"], self.configuration["longitude"])
         else: #otherwise just check if device probed earlier and update last seen
             self.probes.seen(pkt.addr2)
 

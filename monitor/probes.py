@@ -6,7 +6,7 @@ DEVICE_NEW = 0
 DEVICE_TIMEOUT = 1
 
 class device:
-    def __init__(self, MAC): #Creates a new device instance
+    def __init__(self, MAC, latitude, longitude): #Creates a new device instance
         self.MAC = MAC
         self.firstSeen = datetime.datetime.now()
         self.lastSeen = self.firstSeen

@@ -90,4 +90,5 @@ class mysql_connector:
                 self.cnx.commit()
             except mysql.connector.errors.OperationalError:
                 self.storage_queue.append(device)
+                self.cnx.reconnect(attempts=1, delay=0)
         print(self.storage_queue)

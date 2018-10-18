@@ -22,7 +22,7 @@ class mysql_connector:
             self.cnx.reconnect(attempts=1, delay=0)
         except mysql.connector.errors.InterfaceError:
             return False
-        else
+        else:
             print("reconnect good")
             return True
 

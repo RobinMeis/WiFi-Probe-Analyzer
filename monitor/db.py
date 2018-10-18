@@ -77,7 +77,7 @@ class mysql_connector:
         self.toDB() #Write to database
 
     def toDB(self):
-        for i in range(0, len(self.storage_queue) - 1):
+        for i in range(0, len(self.storage_queue)):
             device = self.storage_queue.pop()
             try:
                 self.handleDevice(device.MAC, device.firstSeen, device.lastSeen)

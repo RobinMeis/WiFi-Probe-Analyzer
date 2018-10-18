@@ -8,6 +8,7 @@ class mysql_connector:
         self.password = password
         self.database = database
         self.cnx = None
+        self.storage_queue = []
 
     def connect(self):
         self.cnx = mysql.connector.connect(user=self.user, password=self.password, host=self.host, database=self.database)
@@ -72,11 +73,16 @@ class mysql_connector:
         cursor.execute(addRelation, dataRelation)
 
     def storeDevice(self, device):
-        self.handleDevice(device.MAC, device.firstSeen, device.lastSeen)
-        sessionID = self.addSession(device.MAC, device.firstSeen, device.lastSeen, device.seenCount, device.latitude, device.longitude)
+        self.storage_queue.append(device) #Put into storage queue. In case of connection issues, this will avoid data loss
+        self.toDB() #Write to database
 
-        for ESSID in device.ESSIDs:
-            self.handleESSID(ESSID, device.firstSeen, device.lastSeen)
-            self.addESSIDrelation(sessionID, ESSID)
+    def toDB(self):
+        for device in self.storage_queue:
+            self.handleDevice(device.MAC, device.firstSeen, device.lastSeen)
+            sessionID = self.addSession(device.MAC, device.firstSeen, device.lastSeen, device.seenCount, device.latitude, device.longitude)
 
-        self.cnx.commit()
+            for ESSID in device.ESSIDs:
+                self.handleESSID(ESSID, device.firstSeen, device.lastSeen)
+                self.addESSIDrelation(sessionID, ESSID)
+
+            self.cnx.commit()

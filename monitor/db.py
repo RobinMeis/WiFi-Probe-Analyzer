@@ -77,12 +77,17 @@ class mysql_connector:
         self.toDB() #Write to database
 
     def toDB(self):
-        for device in self.storage_queue:
-            self.handleDevice(device.MAC, device.firstSeen, device.lastSeen)
-            sessionID = self.addSession(device.MAC, device.firstSeen, device.lastSeen, device.seenCount, device.latitude, device.longitude)
+        for i in range(0, len(self.storage_queue) - 1):
+            device = self.storage_queue.pop()
+            try:
+                self.handleDevice(device.MAC, device.firstSeen, device.lastSeen)
+                sessionID = self.addSession(device.MAC, device.firstSeen, device.lastSeen, device.seenCount, device.latitude, device.longitude)
 
-            for ESSID in device.ESSIDs:
-                self.handleESSID(ESSID, device.firstSeen, device.lastSeen)
-                self.addESSIDrelation(sessionID, ESSID)
+                for ESSID in device.ESSIDs:
+                    self.handleESSID(ESSID, device.firstSeen, device.lastSeen)
+                    self.addESSIDrelation(sessionID, ESSID)
 
-            self.cnx.commit()
+                self.cnx.commit()
+            except mysql.connector.errors.OperationalError:
+                self.storage_queue.append(device)
+        print(self.storage_queue)

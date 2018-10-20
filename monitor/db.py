@@ -25,15 +25,19 @@ class mysql_connector:
             return True
 
     def addDevice(self, MAC, firstSeen, lastSeen): #Add new device to database
-        try: #Try to add device to database
+        cursor = self.cnx.cursor() #Check for existing device
+        checkDevice = "SELECT `MAC` FROM `devices` WHERE `MAC` = %s LIMIT 1"
+        dataDevice = (MAC)
+        cursor.execute(checkDevice, dataDevice)
+
+        if (cursor.rowcount() == 0): #Add if not in DB yet
             cursor = self.cnx.cursor()
             addDevice = "INSERT INTO `devices` (`MAC`, `firstSeen`, `lastSeen`) VALUES (%s, %s, %s)"
             dataDevice = (MAC, firstSeen, lastSeen)
             cursor.execute(addDevice, dataDevice)
-        except mysql.connector.errors.IntegrityError: #If device does exist...
-            return False #...return false...
+            return True
         else:
-            return True #...otherwise true
+            return False
 
     def seenDevice(self, MAC, lastSeen): #Update last seen timestamp of a device
         cursor = self.cnx.cursor()

@@ -26,7 +26,7 @@ class mysql_connector:
 
     def addDevice(self, MAC, firstSeen, lastSeen): #Add new device to database
         cursor = self.cnx.cursor() #Check for existing device
-        checkDevice = "SELECT `MAC` FROM `devices` WHERE `MAC` = %s LIMIT 1"
+        checkDevice = "SELECT `id` FROM `devices` WHERE `MAC` = %s"
         dataDevice = (MAC)
         cursor.execute(checkDevice, dataDevice)
 

@@ -66,7 +66,7 @@ class mysql_connector:
 
     def seenESSID(self, ESSID, lastSeen): #Update last seen timestamp of a device
         cursor = self.cnx.cursor()
-        seenESSID = "UPDATE `ESSIDs` SET `lastSeen` = %s WHERE `ESSID` = %s"
+        seenESSID = "UPDATE `ESSIDs` SET `lastSeen` = %s, `sessionCount` = `sessionCount` + 1 WHERE `ESSID` = %s"
         dataESSID = (lastSeen, ESSID)
         cursor.execute(seenESSID, dataESSID)
 

@@ -29,7 +29,7 @@ class mysql_connector:
         checkDevice = "SELECT `id` FROM `devices` WHERE `MAC` = %s LIMIT 1"
         dataDevice = (MAC,)
         cursor.execute(checkDevice, dataDevice)
-
+        cursor.fetchall()
         if (cursor.rowcount == 0): #Add if not in DB yet
             cursor = self.cnx.cursor()
             addDevice = "INSERT INTO `devices` (`MAC`, `firstSeen`, `lastSeen`) VALUES (%s, %s, %s)"

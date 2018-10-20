@@ -8,7 +8,7 @@ DEVICE_TIMEOUT = 1
 class device:
     def __init__(self, MAC, latitude, longitude): #Creates a new device instance
         self.MAC = MAC
-        self.firstSeen = datetime.datetime.now()
+        self.firstSeen = datetime.datetime.utcnow()
         self.lastSeen = self.firstSeen
         self.seenCount = 1
         self.ESSIDs = set()
@@ -18,7 +18,7 @@ class device:
         self.longitude = longitude
 
     def seen(self): #Called if device is seen again
-        self.lastSeen = datetime.datetime.now()
+        self.lastSeen = datetime.datetime.utcnow()
         self.seenCount += 1
 
     def addESSID(self, ESSID): #Adds an ESSID...
@@ -52,7 +52,7 @@ class probes:
         devices = self.devices.copy()
         for deviceMAC in devices:
             device = self.devices[deviceMAC]
-            if (device.lastSeen < datetime.datetime.now() - datetime.timedelta(seconds=self.timeout)): #Timeout reached?
+            if (device.lastSeen < datetime.datetime.utcnow() - datetime.timedelta(seconds=self.timeout)): #Timeout reached?
                 del self.devices[deviceMAC] #Unregister device
                 if (self.timeoutCallback != None): #If available, call calback
                     self.timeoutCallback(device)

@@ -1,4 +1,3 @@
-import datetime
 import mysql.connector
 
 class mysql_connector:

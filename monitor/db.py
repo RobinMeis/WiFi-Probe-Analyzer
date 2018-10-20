@@ -50,15 +50,19 @@ class mysql_connector:
             self.seenDevice(MAC, lastSeen) #...just update last seen timestamp
 
     def addESSID(self, ESSID, firstSeen, lastSeen): #Add new ESSID to database
-        try: #Try to add ESSID to database
+        cursor = self.cnx.cursor() #Check for existing SSID
+        checkDevice = "SELECT `ESSID` FROM `ESSIDs` WHERE `ESSID` = %s LIMIT 1"
+        dataDevice = (ESSID,)
+        cursor.execute(checkDevice, dataDevice)
+        cursor.fetchall()
+        if (cursor.rowcount == 0): #Add if not in DB yet
             cursor = self.cnx.cursor()
             addESSID = "INSERT INTO `ESSIDs` (`ESSID`, `firstSeen`, `lastSeen`) VALUES (%s, %s, %s)"
             dataESSID = (ESSID, firstSeen, lastSeen)
             cursor.execute(addESSID, dataESSID)
-        except mysql.connector.errors.IntegrityError: #If ESSID does exist...
-            return False #...return false...
+            return True
         else:
-            return True #...otherwise true
+            return False
 
     def seenESSID(self, ESSID, lastSeen): #Update last seen timestamp of a device
         cursor = self.cnx.cursor()

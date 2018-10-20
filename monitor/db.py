@@ -41,7 +41,7 @@ class mysql_connector:
 
     def seenDevice(self, MAC, lastSeen): #Update last seen timestamp of a device
         cursor = self.cnx.cursor()
-        seenDevice = "UPDATE `devices` SET `lastSeen` = %s WHERE `MAC` = %s"
+        seenDevice = "UPDATE `devices` SET `lastSeen` = %s, `sessionCount` = `sessionCount` + 1  WHERE `MAC` = %s"
         dataDevice = (lastSeen, MAC)
         cursor.execute(seenDevice, dataDevice)
 

@@ -1,18 +1,20 @@
 import datetime
 import time
 import threading
+from manuf import manuf
 
 DEVICE_NEW = 0
 DEVICE_TIMEOUT = 1
 
 class device:
-    def __init__(self, MAC, manufacturer, latitude, longitude): #Creates a new device instance
+    def __init__(self, MAC, latitude, longitude): #Creates a new device instance
+        self.manuf = manuf.MacParser()
         self.MAC = MAC
         self.firstSeen = datetime.datetime.utcnow()
         self.lastSeen = self.firstSeen
         self.seenCount = 1
         self.ESSIDs = set()
-        self.manufacturer = manufacturer
+        self.manufacturer = manufacturer = self.manuf.get_manuf(MAC)
         self.latitude = latitude
         self.longitude = longitude
 
@@ -37,11 +39,11 @@ class probes:
         except KeyError: #Do nothing if device is unknown
             pass
 
-    def probe(self, deviceMAC, ESSID, manufacturer, latitude, longitude): #A probe request (from scapy)
+    def probe(self, deviceMAC, ESSID, latitude, longitude): #A probe request (from scapy)
         try:
             self.devices[deviceMAC].seen() #Check if device known and update last seen
         except KeyError:
-            self.devices[deviceMAC] = device(deviceMAC, manufacturer, latitude, longitude) #Create new device
+            self.devices[deviceMAC] = device(deviceMAC, latitude, longitude) #Create new device
             if (self.newCallback != None): #If available, call calback
                 self.newCallback(self.devices[deviceMAC])
 

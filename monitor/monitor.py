@@ -20,7 +20,8 @@ class monitor:
             try:
                 self.probes.probe(pkt.addr2, pkt.info.decode('UTF-8'), self.configuration["latitude"], self.configuration["longitude"])
             except UnicodeDecodeError: #Ignore ESSID in case of encoding proble$
-                self.probes.probe(pkt.addr2, None, self.configuration["latitude$
+                self.probes.probe(pkt.addr2, None, self.configuration["latitude"], self.configuration["longitude"])
+
 
         else: #otherwise just check if device probed earlier and update last seen
             self.probes.seen(pkt.addr2)

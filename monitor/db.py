@@ -32,7 +32,7 @@ class mysql_connector:
         cursor.fetchall()
         if (cursor.rowcount == 0): #Add if not in DB yet
             cursor = self.cnx.cursor()
-            addDevice = "INSERT INTO `devices` (`MAC`, `firstSeen`, `lastSeen`) VALUES (%s, %s, %s)"
+            addDevice = "INSERT INTO `devices` (`MAC`, `firstSeen`, `lastSeen`, `sessionCount`) VALUES (%s, %s, %s, 1)"
             dataDevice = (MAC, firstSeen, lastSeen)
             cursor.execute(addDevice, dataDevice)
             return True

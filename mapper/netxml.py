@@ -66,8 +66,6 @@ class parser:
             if (location != None):
                 if (network["@type"] == "infrastructure"): #Handle infrastructure networks
                     self.handleInfrastructure(network, location)
-
-                    #break
                 elif (network["@type"] == "probe"): #We could do something with this as well!
                     pass
 

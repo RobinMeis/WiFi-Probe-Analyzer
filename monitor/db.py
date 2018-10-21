@@ -32,7 +32,7 @@ class mysql_connector:
         cursor.fetchall()
         if (cursor.rowcount == 0): #Add if not in DB yet
             cursor = self.cnx.cursor()
-            addDevice = "INSERT INTO `devices` (`MAC`, `firstSeen`, `lastSeen`, `sessionCount`) VALUES (%s, %s, %s, 1)"
+            addDevice = "INSERT INTO `devices` (`MAC`, `firstSeen`, `lastSeen`, `sessionCount`, `probesSeen`) VALUES (%s, %s, %s, 1, 1)"
             dataDevice = (MAC, firstSeen, lastSeen)
             cursor.execute(addDevice, dataDevice)
             return True
@@ -41,7 +41,7 @@ class mysql_connector:
 
     def seenDevice(self, MAC, lastSeen): #Update last seen timestamp of a device
         cursor = self.cnx.cursor()
-        seenDevice = "UPDATE `devices` SET `lastSeen` = %s, `sessionCount` = `sessionCount` + 1  WHERE `MAC` = %s"
+        seenDevice = "UPDATE `devices` SET `lastSeen` = %s, `sessionCount` = `sessionCount` + 1, `probesSeen` = 1  WHERE `MAC` = %s"
         dataDevice = (lastSeen, MAC)
         cursor.execute(seenDevice, dataDevice)
 

@@ -1,12 +1,15 @@
 import xmltodict
+from manuf import manuf
 
 class network:
-    def __init__(self, BSSID, ESSID, RSSI, channel, location): #Create a new network
+    def __init__(self, manuf, BSSID, ESSID, RSSI, channel, location): #Create a new network
         self.BSSID = BSSID
         self.ESSID = ESSID
         self.RSSI = RSSI
         self.channel = channel
         self.location = location
+        self.manuf = manuf
+        self.manufacturer = self.manuf.get_manuf(BSSID)
         self.devices = []
 
     def addClient(self, MAC): #Add a device to network
@@ -20,6 +23,7 @@ class parser:
     def __init__(self, xml):
         self.netxml = xmltodict.parse(xml)
         self.networks = {}
+        self.manuf = manuf.MacParser(update=True)
 
     def getLocation(self, network): #Gets the best available location information
         try: #Check if location is available
@@ -51,7 +55,7 @@ class parser:
                 self.networks[BSSID].RSSI = RSSI
                 self.networks[BSSID].location = location #...update location
         else: #If not, add new network
-            self.networks[BSSID] = network(BSSID, ESSID, RSSI, channel, location)
+            self.networks[BSSID] = network(self.manuf, BSSID, ESSID, RSSI, channel, location)
 
         clients = net["wireless-client"] #Add clients to network
         for client in clients:

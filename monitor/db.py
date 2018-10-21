@@ -45,8 +45,8 @@ class mysql_connector:
         dataDevice = (lastSeen, MAC)
         cursor.execute(seenDevice, dataDevice)
 
-    def handleDevice(self, MAC, firstSeen, lastSeen): #Handle a seen device
-        if (not self.addDevice(MAC, firstSeen, lastSeen)): #Try to add device, if fails...
+    def handleDevice(self, MAC, manufacturer, firstSeen, lastSeen): #Handle a seen device
+        if (not self.addDevice(MAC, manufacturer, firstSeen, lastSeen)): #Try to add device, if fails...
             self.seenDevice(MAC, lastSeen) #...just update last seen timestamp
 
     def addESSID(self, ESSID, firstSeen, lastSeen): #Add new ESSID to database
@@ -95,7 +95,7 @@ class mysql_connector:
         for i in range(0, len(self.storage_queue)): #Try to write data to database
             device = self.storage_queue.pop()
             try:
-                self.handleDevice(device.MAC, device.firstSeen, device.lastSeen)
+                self.handleDevice(device.MAC, device.manufacturer, device.firstSeen, device.lastSeen)
                 sessionID = self.addSession(device.MAC, device.firstSeen, device.lastSeen, device.seenCount, device.latitude, device.longitude)
 
                 for ESSID in device.ESSIDs:

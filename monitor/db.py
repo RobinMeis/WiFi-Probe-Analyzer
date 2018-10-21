@@ -41,13 +41,13 @@ class mysql_connector:
 
     def seenDevice(self, MAC, lastSeen): #Update last seen timestamp of a device
         cursor = self.cnx.cursor()
-        seenDevice = "UPDATE `devices` SET `lastSeen` = %s, `sessionCount` = `sessionCount` + 1, `probesSeen` = 1  WHERE `MAC` = %s"
-        dataDevice = (lastSeen, MAC)
+        seenDevice = "UPDATE `devices` SET `lastSeen` = %s, `manufacturer` = %s, `sessionCount` = `sessionCount` + 1, `probesSeen` = 1  WHERE `MAC` = %s"
+        dataDevice = (lastSeen, manufacturer, MAC)
         cursor.execute(seenDevice, dataDevice)
 
     def handleDevice(self, MAC, manufacturer, firstSeen, lastSeen): #Handle a seen device
         if (not self.addDevice(MAC, manufacturer, firstSeen, lastSeen)): #Try to add device, if fails...
-            self.seenDevice(MAC, lastSeen) #...just update last seen timestamp
+            self.seenDevice(MAC, manufacturer, lastSeen) #...just update last seen timestamp
 
     def addESSID(self, ESSID, firstSeen, lastSeen): #Add new ESSID to database
         cursor = self.cnx.cursor() #Check for existing SSID

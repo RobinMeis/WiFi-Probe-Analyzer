@@ -37,7 +37,7 @@ class parser:
 
             return coordinates
 
-    def handleInfrastructure(self, net, location):
+    def handleInfrastructure(self, net, location): #Parses an infrastructure network
         BSSID = net["BSSID"] #Get basic information
         RSSI = int(net["snr-info"]["max_signal_dbm"])
         channel = net["channel"]
@@ -63,7 +63,7 @@ class parser:
 
     def parse(self):
         networks = self.netxml["detection-run"]["wireless-network"]
-        for network in networks:
+        for network in networks: #Decide how to handle a network
             location = self.getLocation(network)
             if (location != None):
                 if (network["@type"] == "infrastructure"): #Handle infrastructure networks

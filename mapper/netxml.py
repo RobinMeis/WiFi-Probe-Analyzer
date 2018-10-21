@@ -1,10 +1,11 @@
 import xmltodict
 
 class network:
-    def __init__(self, BSSID, ESSID, RSSI, location): #Create a new network
+    def __init__(self, BSSID, ESSID, RSSI, channel, location): #Create a new network
         self.BSSID = BSSID
         self.ESSID = ESSID
         self.RSSI = RSSI
+        self.channel = channel
         self.location = location
         self.devices = []
 
@@ -39,6 +40,7 @@ class parser:
     def handleInfrastructure(self, net, location):
         BSSID = net["BSSID"] #Get basic information
         RSSI = int(net["snr-info"]["max_signal_dbm"])
+        channel = net["channel"]
         try: #Chek wether the network sends an ESSID
             ESSID = net["SSID"]["essid"]["#text"]
         except KeyError:
@@ -49,7 +51,7 @@ class parser:
                 self.networks[BSSID].RSSI = RSSI
                 self.networks[BSSID].location = location #...update location
         else: #If not, add new network
-            self.networks[BSSID] = network(BSSID, ESSID, RSSI, location)
+            self.networks[BSSID] = network(BSSID, ESSID, RSSI, channel, location)
 
         clients = net["wireless-client"] #Add clients to network
         for client in clients:

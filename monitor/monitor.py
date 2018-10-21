@@ -8,6 +8,7 @@ from manuf import manuf
 class monitor:
     def __init__(self, configuration):
         self.configuration = configuration
+        self.manuf = manuf.MacParser(update=True)
         self.db = mysql_connector(configuration["mysql_host"], configuration["mysql_user"], configuration["mysql_password"], configuration["mysql_db"])
         self.db.connect()
         self.probes = probes(configuration["session_timeout"])
@@ -15,7 +16,6 @@ class monitor:
         self.probes.setCallback(DEVICE_NEW, self.deviceNew)
         self.probes.setCallback(DEVICE_TIMEOUT, self.deviceTimeout)
         sniff (iface=configuration["interface"], prn=self.PacketHandler, store=0)
-        self.manuf = manuf.MacParser(update=True)
 
     def PacketHandler(self, pkt):
         if pkt.type == 0 and pkt.subtype == 0x04: #If packet is probe

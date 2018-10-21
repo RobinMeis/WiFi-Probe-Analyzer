@@ -12,8 +12,6 @@ class device:
         self.lastSeen = self.firstSeen
         self.seenCount = 1
         self.ESSIDs = set()
-        self.threadRun = False
-        self.threadID = None
         self.manufacturer = manufacturer
         self.latitude = latitude
         self.longitude = longitude

@@ -17,7 +17,11 @@ class monitor:
 
     def PacketHandler(self, pkt):
         if pkt.type == 0 and pkt.subtype == 0x04: #If packet is probe
-            self.probes.probe(pkt.addr2, pkt.info.decode('UTF-8'), self.configuration["latitude"], self.configuration["longitude"])
+            try:
+                self.probes.probe(pkt.addr2, pkt.info.decode('UTF-8'), self.configuration["latitude"], self.configuration["longitude"])
+            except UnicodeDecodeError: #Ignore ESSID in case of encoding proble$
+                self.probes.probe(pkt.addr2, None, self.configuration["latitude$
+
         else: #otherwise just check if device probed earlier and update last seen
             self.probes.seen(pkt.addr2)
 

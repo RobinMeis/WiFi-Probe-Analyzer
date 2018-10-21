@@ -39,7 +39,7 @@ class mysql_connector:
         else:
             return False
 
-    def seenDevice(self, MAC, lastSeen): #Update last seen timestamp of a device
+    def seenDevice(self, MAC, manufacturer, lastSeen): #Update last seen timestamp of a device
         cursor = self.cnx.cursor()
         seenDevice = "UPDATE `devices` SET `lastSeen` = %s, `manufacturer` = %s, `sessionCount` = `sessionCount` + 1, `probesSeen` = 1  WHERE `MAC` = %s"
         dataDevice = (lastSeen, manufacturer, MAC)

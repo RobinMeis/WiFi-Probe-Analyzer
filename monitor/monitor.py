@@ -3,6 +3,7 @@ from probes import *
 from db import *
 import time
 import re
+from manuf import manuf
 
 class monitor:
     def __init__(self, configuration):
@@ -14,13 +15,15 @@ class monitor:
         self.probes.setCallback(DEVICE_NEW, self.deviceNew)
         self.probes.setCallback(DEVICE_TIMEOUT, self.deviceTimeout)
         sniff (iface=configuration["interface"], prn=self.PacketHandler, store=0)
+        self.manuf = manuf.MacParser(update=True)
 
     def PacketHandler(self, pkt):
         if pkt.type == 0 and pkt.subtype == 0x04: #If packet is probe
+            manufacturer = self.manuf.get_manuf(pkt.addr2)
             try:
-                self.probes.probe(pkt.addr2, pkt.info.decode('UTF-8'), self.configuration["latitude"], self.configuration["longitude"])
+                self.probes.probe(pkt.addr2, pkt.info.decode('UTF-8'), manufacturer, self.configuration["latitude"], self.configuration["longitude"])
             except UnicodeDecodeError: #Ignore ESSID in case of encoding proble$
-                self.probes.probe(pkt.addr2, None, self.configuration["latitude"], self.configuration["longitude"])
+                self.probes.probe(pkt.addr2, None, manufacturer, self.configuration["latitude"], self.configuration["longitude"])
 
 
         else: #otherwise just check if device probed earlier and update last seen

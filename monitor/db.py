@@ -24,7 +24,7 @@ class mysql_connector:
         else:
             return True
 
-    def addDevice(self, MAC, firstSeen, lastSeen): #Add new device to database
+    def addDevice(self, MAC, manufacturer, firstSeen, lastSeen): #Add new device to database
         cursor = self.cnx.cursor() #Check for existing device
         checkDevice = "SELECT `id` FROM `devices` WHERE `MAC` = %s LIMIT 1"
         dataDevice = (MAC,)
@@ -32,8 +32,8 @@ class mysql_connector:
         cursor.fetchall()
         if (cursor.rowcount == 0): #Add if not in DB yet
             cursor = self.cnx.cursor()
-            addDevice = "INSERT INTO `devices` (`MAC`, `firstSeen`, `lastSeen`, `sessionCount`, `probesSeen`) VALUES (%s, %s, %s, 1, 1)"
-            dataDevice = (MAC, firstSeen, lastSeen)
+            addDevice = "INSERT INTO `devices` (`MAC`, `manufacturer`, `firstSeen`, `lastSeen`, `sessionCount`, `probesSeen`) VALUES (%s, %s, %s, %s, 1, 1)"
+            dataDevice = (MAC, manufacturer, firstSeen, lastSeen)
             cursor.execute(addDevice, dataDevice)
             return True
         else:

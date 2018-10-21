@@ -1,6 +1,11 @@
 import xmltodict
 from manuf import manuf
 
+class device:
+    def __init__(self, MAC, manufacturer):
+        self.MAC = MAC
+        self.manufacturer = manufacturer
+
 class network:
     def __init__(self, manuf, BSSID, ESSID, RSSI, channel, location): #Create a new network
         self.BSSID = BSSID
@@ -10,11 +15,11 @@ class network:
         self.location = location
         self.manuf = manuf
         self.manufacturer = self.manuf.get_manuf(BSSID)
-        self.devices = []
+        self.devices = {}
 
     def addClient(self, MAC): #Add a device to network
-        if (MAC != self.BSSID and MAC not in self.devices): #Add only if devices MAC is not equal to BSSID
-            self.devices.append(MAC)
+        if (MAC != self.BSSID): #Add only if devices MAC is not equal to BSSID
+            self.devices[MAC] = device(MAC, self.manuf.get_manuf(MAC))
             return True
         else:
             return False

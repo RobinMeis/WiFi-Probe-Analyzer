@@ -1,0 +1,4 @@
+mysql_host:"mysql"                #Host of your MySQL Databse
+mysql_user:"root"                 #MySQL User
+mysql_password:"mypassword"       #MySQL Password
+mysql_db:"probes"                 #MySQL Database

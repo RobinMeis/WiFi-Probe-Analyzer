@@ -31,6 +31,8 @@ class mysql_connector:
         values = (network.BSSID, network.ESSID, network.channel, network.RSSI, network.location["latitude"], network.location["longitude"], network.manufacturer)
         cur.execute("INSERT INTO `networks` (`BSSID`, `ESSID`, `channel`, `RSSImax`, `latitude`, `longitude`, `manufacturer`) VALUES (%s, %s, %s, %s, %s, %s, %s)", values)
         self.cnx.commit()
+        network.ID = cur.lastrowid
+        return network
 
     def getNetwork(self, BSSID):
         cur = self.cnx.cursor(dictionary=True)
@@ -64,7 +66,7 @@ class mysql_connector:
         values = (device.MAC, device.manufacturer)
         cur.execute("INSERT INTO `devices` (`MAC`, `firstSeen`, `lastSeen`, `sessionCount`, `probesSeen`, `connectedSeen`, `manufacturer`) VALUES (%s, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0, 0, 1, %s)", values)
         self.cnx.commit()
-        device.ID = cursor.lastrowid
+        device.ID = cur.lastrowid
         return device
 
     def updateDevice(self, device):
@@ -74,7 +76,7 @@ class mysql_connector:
         self.cnx.commit()
 
     def getRelationID(self, deviceID, networkID):
-        cur = self.cnx.cursor()
+        cur = self.cnx.cursor(dictionary=True)
         cur.execute("SELECT `id` FROM `connectedDevices` WHERE `deviceID` = %s and `networkID` = %s", (deviceID, networkID))
         row = cur.fetchone()
         if (row != None):

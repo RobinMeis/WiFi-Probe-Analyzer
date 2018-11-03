@@ -51,7 +51,7 @@ class mysql_connector:
 
     def addESSID(self, ESSID, firstSeen, lastSeen): #Add new ESSID to database
         cursor = self.cnx.cursor() #Check for existing SSID
-        checkDevice = "SELECT `ESSID` FROM `ESSIDs` WHERE `ESSID` = %s LIMIT 1"
+        checkDevice = "SELECT `ESSID` FROM `ESSIDs` WHERE `ESSID` = BINARY %s LIMIT 1"
         dataDevice = (ESSID,)
         cursor.execute(checkDevice, dataDevice)
         cursor.fetchall()

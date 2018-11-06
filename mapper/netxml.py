@@ -19,7 +19,7 @@ class network:
 
     def addClient(self, MAC): #Add a device to network
         if (MAC != self.BSSID): #Add only if devices MAC is not equal to BSSID
-            self.devices[MAC] = device(MAC, self.manuf.get_manuf(MAC))
+            self.devices[MAC] = device(MAC, self.manuf.get_manuf_long(MAC))
             return True
         else:
             return False

@@ -52,7 +52,7 @@ class parser:
         channel = net["channel"]
         try: #Chek wether the network sends an ESSID
             ESSID = net["SSID"]["essid"]["#text"]
-        except KeyError:
+        except:
             ESSID = None
 
         if (BSSID in self.networks): #Check if network is already known

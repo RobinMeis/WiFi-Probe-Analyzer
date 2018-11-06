@@ -14,7 +14,7 @@ class network:
         self.channel = channel
         self.location = location
         self.manuf = manuf
-        self.manufacturer = self.manuf.get_manuf(BSSID)
+        self.manufacturer = self.manuf.get_manuf_long(BSSID)
         self.devices = {}
 
     def addClient(self, MAC): #Add a device to network

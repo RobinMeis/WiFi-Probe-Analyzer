@@ -14,7 +14,7 @@ class device:
         self.lastSeen = self.firstSeen
         self.seenCount = 1
         self.ESSIDs = set()
-        self.manufacturer = self.manuf.get_manuf(MAC)
+        self.manufacturer = self.manuf.get_manuf_long(MAC)
         self.latitude = latitude
         self.longitude = longitude
 
